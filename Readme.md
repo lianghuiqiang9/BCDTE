@@ -1,13 +1,24 @@
 
-## Install libcdte.so
+# Install libcdte.so
 cd CDTE
 bash installCDTE.sh
 cd ..
 
-## build
+# build
 
 bash build_cdte.sh
 cd build
+
+# bcdte
+
+./cdcmp_cdte -t ../data/heart_11bits/model.json -v ../data/heart_11bits/x_test.csv -r 1024 -n 16 -d 3 -e 2
+
+./cdcmp_cdte -t ../data/breast_11bits/model.json -v ../data/breast_11bits/x_test.csv -r 1024 -n 16 -d 7 -e 2
+
+./cdcmp_cdte -t ../data/spam_11bits/model.json -v ../data/spam_11bits/x_test.csv -r 1024 -n 16 -d 16 -e 2
+
+killed, memory problem.   
+./cdcmp_cdte -t ../data/electricity_10bits/model.json -v ../data/electricity_10bits/x_test.csv -r 1024 -n 16 -d 10 -e 3
 
 # new data 
 
@@ -23,19 +34,8 @@ mkdir ../data/breast_16bits
 mkdir ../data/breast_32bits 
 ./new_tree_and_data -i ../data/breast_11bits -o ../data/breast_32bits -n 32 -s 16384 
 
-# pir_cdcmp_cdte
 
-./pir_cdcmp_cdte -t ../data/heart_16bits/model.json -v ../data/heart_16bits/x_test.csv -n 16 -d 3 -e 5 -r 2048 -q 1030
-
-./pir_cdcmp_cdte -t ../data/heart_16bits/model.json -v ../data/heart_16bits/x_test.csv -n 16 -d 3 -e 5 -r 1048576 -q 3049
-
-./pir_cdcmp_cdte -t ../data/breast_16bits/model.json -v ../data/breast_16bits/x_test.csv -n 16 -d 7 -e 4 -r 2048 -q 1031
-
-//1024*128 ok 1024*256 not ok. so the max tree n = 16, d = 8, m = 10; the data 1024 * 128 * 30 = 1024 * 1024 * 3.75
-./pir_cdcmp_cdte -t ../data/breast_16bits/model.json -v ../data/breast_16bits/x_test.csv -n 16 -d 7 -e 4 -r 131072 -q 1031
-
-
-## cmp_branch
+# cmp_branch
 
 cd cmp_bench
 bash build_cmp_bench.sh
@@ -71,3 +71,4 @@ cd build
 
 # the most bit precision
 ./tecmp -l 2048 -m 13
+
