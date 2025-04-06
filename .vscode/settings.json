@@ -70,7 +70,11 @@
         "bitset": "cpp",
         "cfenv": "cpp",
         "optional": "cpp",
-        "span_ext": "cpp"
+        "span_ext": "cpp",
+        "charconv": "cpp",
+        "format": "cpp",
+        "variant": "cpp",
+        "cassert": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
