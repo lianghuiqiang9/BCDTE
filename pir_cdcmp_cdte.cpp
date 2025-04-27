@@ -143,7 +143,8 @@ int main(int argc, char* argv[]){
             query_first_index_cipher[i] = init_zero_zero_zero_cipher(batch_encoder,encryptor,slot_count);
         }
     }
-    Ciphertext query_second_index_cipher = init_only_index_is_one_cipher(batch_encoder,encryptor,query_second_index,slot_count,num_cmps,num_cmps_per_row,num_slots_per_element,row_count);
+    //这里query2的编码方式不仅仅index是1了，编码长度都要是1
+    Ciphertext query_second_index_cipher = init_index_with_width_bitLength_is_one_cipher(batch_encoder,encryptor,query_second_index,slot_count,num_cmps,num_cmps_per_row,num_slots_per_element,row_count);
 
     cout<<"generate a query done,                            run time is "<<(clock()-start) /1000<<" ms"<<endl;start = clock();
     cout<<"******************************* step 2: server end   *******************************"<<endl;
@@ -195,6 +196,7 @@ int main(int argc, char* argv[]){
     cout<<client_input.size()<<" "<<client_input[0].size()<<" "<<query_first_index_cipher.size()<<endl;
     vector<Ciphertext> client_input_after_query_first = private_info_retrieval(evaluator, query_first_index_cipher, client_input);// +1
     
+    //query_second_index_cipher 在这里
     for(int i=0;i<client_input_after_query_first.size();i++){
         evaluator->multiply_inplace(client_input_after_query_first[i], query_second_index_cipher); //+1
         evaluator->relinearize_inplace(client_input_after_query_first[i],*rlk_server);
@@ -249,8 +251,7 @@ int main(int argc, char* argv[]){
     uint64_t actural_result = root.eval(client_data[query]);
 
     cout<< "the compare result : "<<expect_result <<" "<<actural_result<< endl;
-    //这里的比较结果不一样了。
-    if(!(expect_result == actural_result)){cout<<"may be the depth_need_min is too small, need add the extra number. "<<endl;}//exit(0);}
+    if(!(expect_result == actural_result)){cout<<"may be the depth_need_min is too small, need add the extra number. "<<endl;exit(0);}
 
     long comm = client_send_commun + server_send_commun;
     clock_t pir_overall_run_time = pir_step_1 + pir_step_2;

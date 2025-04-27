@@ -554,3 +554,30 @@ Ciphertext init_only_index_is_one_cipher(BatchEncoder *batch_encoder,Encryptor *
     encryptor->encrypt(one_zero_zero_pt, one_zero_zero_cipher);
     return one_zero_zero_cipher;
 }
+
+Ciphertext init_index_with_width_bitLength_is_one_cipher(BatchEncoder *batch_encoder,Encryptor *encryptor,uint64_t index, int slot_count,uint64_t num_cmps,uint64_t num_cmps_per_row,uint64_t num_slots_per_element,uint64_t row_count){
+    Ciphertext one_zero_zero_cipher;
+    vector<uint64_t> one_zero_zero(slot_count, 0ULL);
+    for(int j = 0; j < num_cmps ; j++){
+        if(j==index){
+
+            //jdx = 0            num_cmps_per_row                2 * num_cmps_per_row              ...
+            //    = row_count    row_count + num_cmps_per_row    row_count + 2 * num_cmps_per_row  ...
+            bool flag = j < num_cmps_per_row; 
+            uint64_t jdx = flag ? ( j * num_slots_per_element ) : ( row_count + (j - num_cmps_per_row) * num_slots_per_element);
+            for(int k=0;k<num_slots_per_element;k++){
+                one_zero_zero[jdx+k] = 1ULL;
+            }
+            
+        }
+        
+        //example index = 2, one_zero_zero[ 2 * num_cmps_per_row ] = 1ULL;
+
+        
+    }
+    
+    Plaintext one_zero_zero_pt; 
+    batch_encoder->encode(one_zero_zero, one_zero_zero_pt);
+    encryptor->encrypt(one_zero_zero_pt, one_zero_zero_cipher);
+    return one_zero_zero_cipher;
+}
